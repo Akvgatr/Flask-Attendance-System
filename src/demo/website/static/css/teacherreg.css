@@ -1,0 +1,43 @@
+body{
+background-color : #111;
+font-family : 'Poppins', sans-serif;
+color : #fff;
+}
+
+.heading{
+ text-align : center;
+}
+
+.reg{
+ display : flex;
+ flex-direction : column;
+ color:#111;
+ gap : 8px;
+}
+.reg input{
+ width : 60%;
+ height : 5vh;
+}
+.reg label{
+ color : #fff;
+}
+.reg button{
+ margin-top : 2%;
+ width : 30%;
+ height : 5vh;
+ background-color : #111;
+ color : #fff;
+ border-radius : 2px;
+ cursor : pointer;
+}
+.container{
+ border : 1px solid #fff;
+ border-radius : 10px;
+ margin-left : 32%;
+ margin-top : 5%;
+ background-color: background-color: rgba(0, 0, 0, 0.4);
+ backdrop-filter : blur(10px);
+ width : 35%;
+ height: 48vh;
+ padding : 10px;
+}

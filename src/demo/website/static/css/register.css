@@ -1,0 +1,41 @@
+body{
+background-color : #111;
+font-family : 'Poppins', sans-serif;
+color : #fff;
+}
+
+.heading{
+ text-align : center;
+}
+
+.reg{
+ display : flex;
+ flex-direction : column;
+ color:#111;
+ gap : 8px;
+}
+.reg input{
+ width : 60%;
+ height : 5vh;
+}
+
+.reg button{
+ margin-top : 2%;
+ width : 30%;
+ height : 5vh;
+ background-color : #111;
+ color : #fff;
+ border-radius : 2px;
+ cursor : pointer;
+}
+.container{
+ border : 1px solid #fff;
+ border-radius : 10px;
+ margin-left : 32%;
+ margin-top : 6%;
+ background-color: rgba(240, 248, 255, 0.3);
+ backdrop-filter : blur(10px);
+ width : 35%;
+ height: 45vh;
+ padding : 10px;
+}

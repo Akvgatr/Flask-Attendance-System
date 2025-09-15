@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Registration</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2c1810 100%);
+      overflow-x: hidden;
+    }
+
+    #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.4;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #FFD700;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-25px) rotate(180deg);
+        opacity: 0.6;
+      }
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .main-title {
+      font-size: 3.2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+      background-size: 200% 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      animation: shimmer 3s ease-in-out infinite;
+      position: relative;
+    }
+
+    .main-title::after {
+      content: '👩‍🏫';
+      position: absolute;
+      top: -10px;
+      right: -60px;
+      font-size: 2.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subtitle {
+      color: #FFD700;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+.container {
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: 25px;
+  padding: 50px 30px ; /* top | right | bottom | left */
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 50px rgba(255, 215, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  height: 800px; /* adjust as needed */
+
+  /* 👇 Add these */
+  margin: 0 auto;  
+}
+
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, transparent);
+      background-size: 300% 300%;
+      border-radius: 25px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    .container:hover::before {
+      opacity: 0.7;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .academic-pattern {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.2rem;
+      opacity: 0.1;
+      animation: rotate 25s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 35px;
+      color: #FFD700;
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .label-icon {
+      font-size: 1.1rem;
+    }
+
+    input {
+      padding: 18px 20px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      background: transparent;
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    input:focus {
+      border-color: #FFD700;
+      background: rgba(255, 215, 0, 0.1);
+      box-shadow: 
+        0 0 0 3px rgba(255, 215, 0, 0.2),
+        0 0 20px rgba(255, 215, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    input:focus + label,
+    input:hover + label {
+      color: #FFA500;
+    }
+
+
+
+    button {
+      padding: 18px 20px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border: none;
+      border-radius: 15px;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    button::after {
+      content: '';
+      font-size: 1.2rem;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+      background: linear-gradient(45deg, #FFA500, #FFD700);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .footer-text {
+      margin-top: 30px;
+      text-align: center;
+      color: #cccccc;
+      font-size: 1rem;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .footer-text a {
+      color: #FFD700;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .footer-text a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #FFD700;
+      transition: width 0.3s ease;
+    }
+
+    .footer-text a:hover {
+      color: #FFA500;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .footer-text a:hover::after {
+      width: 100%;
+    }
+
+    .glow-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.04) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      animation: pulse 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 0.1;
+      }
+    }
+
+    .professional-badge {
+      background: rgba(255, 215, 0, 0.1);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      padding: 8px 25px;
+      border-radius: 25px;
+      color: #FFD700;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    /* Success/Error message styling */
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 500;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .message.success {
+      background: rgba(40, 167, 69, 0.1);
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      color: #28a745;
+    }
+
+    .message.error {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      color: #dc3545;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+
+      .main-title::after {
+        right: -40px;
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 40px 30px;
+        margin: 0 15px;
+      }
+
+      input {
+        padding: 15px 18px;
+        font-size: 0.95rem;
+      }
+
+      button {
+        padding: 16px 18px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-title {
+        font-size: 2rem;
+      }
+
+      .main-title::after {
+        display: none;
+      }
+
+      .container {
+        padding: 35px 25px;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      label {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out 0.9s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.birds.min.js"></script>
+</head>
+<body>
+  <div id="vanta-bg"></div>
+  
+  <div class="particles" id="particles-container"></div>
+  
+  <div class="glow-effect"></div>
+
+  <div class="page-container">
+    <div class="header-section">
+      <h1 class="main-title">Teacher Registration</h1>
+    </div>
+
+    <div class="container">
+      
+      
+      
+      <h2>Create Educator Account</h2>
+
+      <form method="POST" action="{{ url_for('web.teacher_register_post') }}">
+        <div class="form-group">
+          <label for="teacher_id">
+            Teacher ID
+          </label>
+          <input type="text" id="teacher_id" name="teacher_id" placeholder="FAC2024001" required>
+        </div>
+
+        <div class="form-group">
+          <label for="username">
+            Username
+          </label>
+          <input type="text" id="username" name="username" placeholder="prof_smith" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            Password
+          </label>
+          <input type="password" id="password" name="password" placeholder="Create secure password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            Email Address
+          </label>
+          <input type="email" id="email" name="email" placeholder="professor@university.edu" required>
+        </div>
+
+        <button type="submit">
+          <span>Register Teacher</span>
+        </button>
+      </form>
+
+      <p class="footer-text loading">
+        Already have an account?
+        <a href="{{ url_for('web.teacher_login') }}">Login Here</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Vanta.js birds background with reduced intensity
+      VANTA.BIRDS({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        backgroundColor: 0x000000,
+        color1: 0xffd700,
+        color2: 0xffa500,
+        colorMode: "lerp",
+        birdSize: 1.00,
+        wingSpan: 25.00,
+        speedLimit: 3.00,
+        separation: 35.00,
+        alignment: 20.00,
+        cohesion: 15.00,
+        quantity: 3.00
+      });
+
+      // Create floating particles
+      function createParticles() {
+        const container = document.getElementById('particles-container');
+        const particleCount = 1500; // Reduced for less distraction
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          
+          // Random position
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          
+          // Random animation delay
+          particle.style.animationDelay = Math.random() * 10 + 's';
+          
+          // Random animation duration
+          particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+          
+          container.appendChild(particle);
+        }
+      }
+
+      createParticles();
+
+      // Add interactive effects
+      const inputs = document.querySelectorAll('input');
+      const button = document.querySelector('button');
+
+      inputs.forEach((input, index) => {
+        input.addEventListener('focus', function() {
+          this.closest('.form-group').querySelector('label').style.color = '#FFA500';
+        });
+
+        input.addEventListener('blur', function() {
+          if (!this.value) {
+            this.closest('.form-group').querySelector('label').style.color = '#FFD700';
+          }
+        });
+
+        // Teacher ID formatting
+        if (input.name === 'teacher_id') {
+          input.addEventListener('input', function() {
+            // Allow alphanumeric for teacher ID
+            this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+          });
+        }
+
+        // Username formatting
+        if (input.name === 'username') {
+          input.addEventListener('input', function() {
+            // Allow letters, numbers, underscores, dots
+            this.value = this.value.replace(/[^a-zA-Z0-9._]/g, '').toLowerCase();
+          });
+        }
+      });
+
+      // Form submission animation
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(e) {
+        button.style.transform = 'scale(0.95)';
+        button.innerHTML = '<span>Creating Account...</span>';
+        
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 200);
+      });
+
+      // Parallax effect for glow
+      document.addEventListener('mousemove', function(e) {
+        const glow = document.querySelector('.glow-effect');
+        const academicPattern = document.querySelector('.academic-pattern');
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        glow.style.transform = `translate(${-50 + x * 3}%, ${-50 + y * 3}%)`;
+        
+        // Speed up academic pattern on mouse movement
+        academicPattern.style.animationDuration = '10s';
+        setTimeout(() => {
+          academicPattern.style.animationDuration = '25s';
+        }, 2000);
+      });
+
+      // Add subtle entrance animations
+      setTimeout(() => {
+        document.querySelector('.container').style.transform = 'translateY(0)';
+        document.querySelector('.container').style.opacity = '1';
+      }, 300);
+
+      // Add form validation feedback
+      inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (this.checkValidity()) {
+            this.style.borderColor = 'rgba(40, 167, 69, 0.5)';
+          } else if (this.value) {
+            this.style.borderColor = 'rgba(220, 53, 69, 0.5)';
+          }
+        });
+
+        input.addEventListener('input', function() {
+          if (this.style.borderColor.includes('220, 53, 69') || this.style.borderColor.includes('40, 167, 69')) {
+            this.style.borderColor = 'rgba(255, 215, 0, 0.3)';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

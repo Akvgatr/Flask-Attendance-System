@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multi-Modal Attendance System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.waves.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2c1810 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.4;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #FFD700;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-25px) rotate(180deg); opacity: 0.6; }
+    }
+
+    .container-narrow {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 80px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+      background-size: 200% 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .tagline {
+      font-size: 1.4rem;
+      color: #FFD700;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #cccccc;
+      margin-bottom: 50px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .features-list {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease-out 0.9s both;
+    }
+
+    .feature-tag {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      padding: 8px 20px;
+      border-radius: 11px;
+      color: #FFD700;
+      font-size: 0.9rem;
+      font-weight: 600;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .feature-tag:hover {
+      background: rgba(255, 215, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: transparent;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      border-radius: 20px;
+      padding: 50px 30px;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+      animation: fadeInScale 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .card:nth-child(1) { animation-delay: 1.2s; }
+    .card:nth-child(2) { animation-delay: 1.4s; }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.03), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 215, 0, 0.3);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover .icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.2));
+    }
+
+    .card h2 {
+      font-size: 2rem;
+      color: #FFD700;
+      margin-bottom: 15px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover h2 {
+      color: #FFFFFF;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+
+    .card p {
+      color: #cccccc;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover p {
+      color: #FFFFFF;
+    }
+
+    .glow-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .tagline {
+        font-size: 1.1rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .card {
+        padding: 40px 25px;
+      }
+      
+      .features-list {
+        gap: 15px;
+      }
+      
+      .feature-tag {
+        font-size: 0.8rem;
+        padding: 6px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="vanta-bg"></div>
+  
+  <div class="particles" id="particles-container"></div>
+  
+  <div class="glow-effect"></div>
+
+  <main class="container-narrow">
+    <div class="hero-section">
+      <h1>Multi-Modal Attendance System</h1>
+      <p class="subtitle">Advanced attendance tracking powered by AI-driven speech recognition, facial verification, and precise location services for seamless and secure attendance management.</p>
+      
+      <div class="features-list">
+        <div class="feature-tag">🎤 Speech Recognition</div>
+        <div class="feature-tag">👁️ Face Recognition</div>
+        <div class="feature-tag">📍 Location Tracking</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <a href="{{ url_for('web.teacher_login') }}" class="card">
+        <div class="icon">👩‍🏫</div>
+        <h2>Teacher Portal</h2>
+        <p>Create and manage attendance sessions with real-time student verification</p>
+      </a>
+
+      <a href="{{ url_for('web.student_login') }}" class="card">
+        <div class="icon">🎓</div>
+        <h2>Student Portal</h2>
+        <p>Quick and secure attendance marking through voice, face, and location verification</p>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // Initialize Vanta.js waves background
+    VANTA.WAVES({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x000000,
+      shininess: 30.00,
+      waveHeight: 10.00,
+      waveSpeed: 0.50,
+      zoom: 0.80
+    });
+
+    // Create floating particles
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 1500
+      ; // Reduced for cleaner look
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random position
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        
+        // Random animation delay
+        particle.style.animationDelay = Math.random() * 10 + 's';
+        
+        // Random animation duration
+        particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+        
+        container.appendChild(particle);
+      }
+    }
+
+    // Initialize particles when page loads
+    window.addEventListener('load', createParticles);
+
+    // Add smooth scrolling and interaction effects
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add hover sound effect simulation (visual feedback)
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transition = 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+        });
+      });
+
+      // Parallax effect for glow
+      document.addEventListener('mousemove', function(e) {
+        const glow = document.querySelector('.glow-effect');
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        glow.style.transform = `translate(${-50 + x * 10}%, ${-50 + y * 10}%)`;
+      });
+    });
+  </script>
+</body>
+</html>

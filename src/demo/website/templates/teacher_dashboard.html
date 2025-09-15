@@ -1,0 +1,701 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block head_extra %}
+<script>
+    window.TEACHER_ID = {{ (current_user.id if current_user.is_authenticated else None) | tojson }};
+    window.TEACHER_NAME = {{ (current_user.name if current_user.is_authenticated else "") | tojson }};
+    window.TEACHER_EMAIL = {{ (current_user.email if current_user.is_authenticated else "") | tojson }};
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  
+  :root {
+    --primary-gold: #FFD700;
+    --secondary-gold: #FFA500;
+    --dark-bg: #000000;
+    --dark-secondary: #1a1a1a;
+    --dark-tertiary: #2c1810;
+    --text-primary: #FFA500;
+    --text-secondary: #b11919ff;
+    --text-muted: #888888;
+    --glass-bg: transparent;
+    --glass-border: rgba(255, 215, 0, 0.2);
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --info: #17a2b8;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif !important;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 50%, var(--dark-tertiary) 100%) !important;
+    color: var(--text-primary) !important;
+    overflow-x: hidden;
+  }
+
+  /* Vanta Background */
+  #vanta-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 0.3;
+  }
+
+  /* Floating Particles */
+  .particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--primary-gold);
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: float 12s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+      opacity: 0.5;
+    }
+  }
+
+  /* Professional Topbar */
+  .topbar {
+    background: transparent !important;
+    backdrop-filter: blur(2px) !important;
+    border-bottom: 2px solid var(--glass-border) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    padding: 15px 25px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    animation: slideDown 0.8s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .logo {
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold)) !important;
+    color: #ffffff !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3) !important;
+  }
+
+  .logo:hover {
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4) !important;
+  }
+
+  .topbar h1 {
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold)) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin: 0 !important;
+  }
+
+  /* Professional Buttons */
+  .btn {
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold)) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 18px !important;
+    border-radius: 10px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2) !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.3) !important;
+  }
+
+  .btn.primary {
+    background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2) !important;
+  }
+
+  .btn.primary:hover {
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.3) !important;
+  }
+
+  .btn.danger {
+    background: linear-gradient(45deg, var(--danger), #ff6b6b) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2) !important;
+  }
+
+  .btn.danger:hover {
+    box-shadow: 0 6px 18px rgba(220, 53, 69, 0.3) !important;
+  }
+
+  /* Professional Badges */
+  .badge {
+    background: transparent !important;
+    border: 1px solid var(--glass-border) !important;
+    color: #ffffff !important;
+    padding: 8px 15px !important;
+    border-radius: 11px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    backdrop-filter: blur(2px) !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+
+  .badge:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* Teacher Info Controls */
+  .compact {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Main Container */
+  .container-wide {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 100px 25px 40px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* Professional Panels */
+  .panel {margin-top: 50px;
+    background: transparent !important;
+    backdrop-filter: blur(2px) !important;
+    border: 2px solid var(--glass-border) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .panel:nth-child(1) { animation-delay: 0.1s; }
+  .panel:nth-child(2) { animation-delay: 0.2s; }
+  .panel:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+    opacity: 0.8;
+  }
+
+  .panel h2 {
+    color: var(--primary-gold) !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .panel:nth-child(1) h2::before { content: ''; font-size: 1.5rem; }
+  .panel:nth-child(2) h2::before { content: ''; font-size: 1.5rem; }
+
+  /* Grid Layout */
+  .grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 20px !important;
+    margin-top: 20px !important;
+  }
+
+  /* Professional Cards (for grid items) */
+  .session-card {
+    background: transparent !important;
+    border: 1px solid rgba(255, 215, 0, 0.2) !important;
+    border-radius: 15px !important;
+    padding: 20px !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(2px) !important;
+  }
+
+  .session-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2) !important;
+    border-color: var(--primary-gold) !important;
+  }
+  .session {
+  background: transparent !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  padding: 15px !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
+}
+
+
+
+  /* Glow Effect */
+  .glow-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.02) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: pulse 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes pulse {
+    0%, 100% { 
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.3;
+    }
+    50% { 
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 0.1;
+    }
+  }
+
+  /* Modal Styling */
+  #sessionModal {
+    background: transparent !important;
+    backdrop-filter: blur(2px) !important;
+    border: 2px solid var(--glass-border) !important;
+    border-radius: 20px !important;
+    padding: 0 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+    color: var(--text-primary) !important;
+    animation: modalSlideIn 0.4s ease-out;
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  #sessionModal::backdrop {
+    background: transparent !important;
+    backdrop-filter: blur(2px) !important;
+  }
+
+  .modal-body {
+      background: rgba(0, 0, 0, 0.6) !important; /* translucent black */
+  backdrop-filter: blur(10px) !important;
+    padding: 30px !important;
+    min-width: 500px !important;
+    max-width: 600px !important;
+  }
+  
+
+  .modal-body h3 {
+    color: var(--primary-gold) !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+  }
+
+  .modal-body label {
+    display: block !important;
+    margin-bottom: 15px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+
+  .modal-body input[type="text"],
+  .modal-body input[type="date"],
+  .modal-body input[type="time"],
+  .modal-body input[type="number"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: #ffffff !important;
+    padding: 12px 15px !important;
+    border-radius: 10px !important;
+    backdrop-filter: blur(2px) !important;
+    width: 100% !important;
+    margin-top: 5px !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .modal-body input:focus {
+    border-color: var(--primary-gold) !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    outline: none !important;
+  }
+
+  .modal-body details {
+    background: transparent !important;
+    border: 1px solid rgba(255, 215, 0, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    margin: 15px 0 !important;
+  }
+
+  .modal-body summary {
+    color: var(--primary-gold) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    margin-bottom: 10px !important;
+  }
+
+  .modal-actions {
+    display: flex !important;
+    gap: 15px !important;
+    justify-content: center !important;
+    margin-top: 25px !important;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .topbar {
+      flex-wrap: wrap !important;
+      padding: 15px 20px !important;
+    }
+
+    .compact {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 10px !important;
+    }
+
+    .topbar h1 {
+      font-size: 1.4rem !important;
+    }
+
+    .container-wide {
+      padding: 120px 20px 40px !important;
+    }
+
+    .panel {
+      padding: 25px 20px !important;
+    }
+
+    .panel h2 {
+      font-size: 1.5rem !important;
+    }
+
+    .grid {
+      grid-template-columns: 1fr !important;
+      gap: 15px !important;
+    }
+
+    .btn {
+      padding: 12px 16px !important;
+      font-size: 0.85rem !important;
+      justify-content: center !important;
+    }
+
+    .modal-body {
+      min-width: 90vw !important;
+      max-width: 90vw !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .topbar {
+      padding: 12px 15px !important;
+    }
+
+    .container-wide {
+      padding: 140px 15px 30px !important;
+    }
+
+    .panel {
+      padding: 20px 15px !important;
+      margin-bottom: 25px !important;
+    }
+
+    .topbar h1 {
+      font-size: 1.2rem !important;
+    }
+
+
+
+    
+    
+  }
+
+  /* Loading Animation */
+  .loading {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* Smooth Scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.fog.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="vanta-bg"></div>
+<div class="particles" id="particles-container"></div>
+<div class="glow-effect"></div>
+
+<header class="topbar">
+  <h1>Teacher Dashboard</h1>
+
+  <!-- Teacher Info -->
+  <div class="compact" style="display:flex; flex-direction:column; margin-left:12px;">
+    <span class="badge">👤 {{ current_user.name }}</span>
+    <span class="badge">📧 {{ current_user.email }}</span>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-left:auto; align-items:center;">
+    <button id="btnNewSession" class="btn primary">+ New Session</button>
+    <a href="{{ url_for('api.export_attendance') }}" class="btn"> Export Attendance</a>
+    <a href="{{ url_for('web.logout') }}" class="btn danger"> Logout</a>
+  </div>
+</header>
+
+<main class="container-wide" style="padding-top:80px">
+  <section class="panel">
+    <h2>Upcoming &amp; Active Sessions</h2>
+    <div id="sessionList" class="grid"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Past Sessions</h2>
+    <div id="pastList" class="grid"></div>
+  </section>
+</main>
+
+<dialog id="sessionModal">
+  <form id="sessionForm" class="modal-body" method="dialog">
+    <h3 id="modalTitle">Create Session</h3>
+
+    <label>Class Name
+      <input name="className" placeholder="e.g. CS101 - Data Structures" required />
+    </label>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit,minmax(200px,1fr));">
+      <label>Date
+        <input type="date" name="date" required />
+      </label>
+
+      <label>Start Time
+        <input type="time" name="start" required />
+      </label>
+
+      <label>End Time (or Duration)
+        <div style="display:flex; gap:8px;">
+          <input type="time" name="end" />
+          <input type="number" name="duration" min="5" step="5" placeholder="mins" />
+        </div>
+      </label>
+    </div>
+
+    <details style="margin:8px 0">
+      <summary>Geofence</summary>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit,minmax(180px,1fr));">
+        <label>Latitude
+          <input type="number" step="any" name="lat" placeholder="e.g. 28.6139" />
+        </label>
+        <label>Longitude
+          <input type="number" step="any" name="lng" placeholder="e.g. 77.2090" />
+        </label>
+        <label>Radius (meters)
+          <input type="number" min="0" step="1" name="radius" placeholder="150" />
+        </label>
+        <button id="btnUseMyLocation" type="button" class="btn">Use my location</button>
+      </div>
+    </details>
+
+    <div class="modal-actions">
+      <button type="button" id="btnCancel" class="btn">Cancel</button>
+      <button type="submit" value="default" class="btn primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Vanta.js fog background
+  VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    highlightColor: 0xffd700,
+    midtoneColor: 0x1a1a1a,
+    lowlightColor: 0x000000,
+    baseColor: 0x000000,
+    blurFactor: 0.6,
+    speed: 1.0,
+    zoom: 0.8
+  });
+
+  // Create floating particles (increased from 15 to match student dashboard)
+  function createParticles() {
+    const container = document.getElementById('particles-container');
+    const particleCount = 1500; // Matching student dashboard
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 12 + 's';
+      particle.style.animationDuration = (10 + Math.random() * 4) + 's';
+      
+      container.appendChild(particle);
+    }
+  }
+
+  createParticles();
+
+  // Parallax effect for glow
+  document.addEventListener('mousemove', function(e) {
+    const glow = document.querySelector('.glow-effect');
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+    
+    glow.style.transform = `translate(${-50 + x * 2}%, ${-50 + y * 2}%)`;
+  });
+
+  // Enhanced button interactions
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      this.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 150);
+    });
+  });
+
+  // Badge hover effects
+  const badges = document.querySelectorAll('.badge');
+  badges.forEach(badge => {
+    badge.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px) scale(1.05)';
+    });
+    
+    badge.addEventListener('mouseleave', function() {
+      this.style.transform = '';
+    });
+  });
+});
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/teacher.js') }}"></script>
+{% endblock %}

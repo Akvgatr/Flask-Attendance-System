@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Registration</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2c1810 100%);
+      overflow-x: hidden;
+    }
+
+    #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.4;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #FFD700;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.6;
+      }
+    }
+
+    .page-container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .main-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+      background-size: 200% 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subtitle {
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+.container {
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: 25px;
+  padding: 50px 30px ; /* top | right | bottom | left */
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 50px rgba(255, 215, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  height: 1200px; /* adjust as needed */
+
+  /* 👇 Add these */
+  margin: 0 auto;  
+}
+
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, transparent);
+      background-size: 300% 300%;
+      border-radius: 25px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    .container:hover::before {
+      opacity: 0.7;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #FFD700;
+      font-size: 2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .label-icon {
+      font-size: 1.1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 18px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    input:focus {
+      border-color: #FFD700;
+      background: rgba(255, 215, 0, 0.1);
+      box-shadow: 
+        0 0 0 3px rgba(255, 215, 0, 0.2),
+        0 0 20px rgba(255, 215, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .biometric-section {
+      margin: 30px 0;
+      padding: 25px;
+      background: rgba(255, 215, 0, 0.05);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .biometric-title {
+      text-align: center;
+      color: #ffffff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .biometric-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    button {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    .btn-save {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+      grid-column: 1 / -1;
+      padding: 18px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+      background: linear-gradient(45deg, #FFA500, #FFD700);
+    }
+
+    .btn-face {
+      background: linear-gradient(45deg,  #FFD700, #FFA500);
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-face:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+    }
+
+    .btn-speech {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(255, 87, 34, 0.3);
+    }
+
+    .btn-speech:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 87, 34, 0.4);
+      background: linear-gradient(45deg, #ff9800, #ff5722);
+    }
+
+    .feedback-section {
+      margin-top: 25px;
+      min-height: 60px;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-weight: 600;
+      text-align: center;
+      color: #FFD700;
+      font-size: 1.1rem;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #speechPhrase {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #FFA500;
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid rgba(255, 165, 0, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .glow-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .footer-text {
+      margin-top: 30px;
+      text-align: center;
+      color: #cccccc;
+      font-size: 1rem;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .footer-text a {
+      color: #FFD700;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .footer-text a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #FFD700;
+      transition: width 0.3s ease;
+    }
+
+    .footer-text a:hover {
+      color: #FFA500;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .footer-text a:hover::after {
+      width: 100%;
+    }
+    @keyframes pulse {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.1;
+      }
+    }
+
+    .success {
+      color: #28a745 !important;
+      background: rgba(40, 167, 69, 0.1) !important;
+      border-color: rgba(40, 167, 69, 0.3) !important;
+    }
+
+    .error {
+      color: #dc3545 !important;
+      background: rgba(220, 53, 69, 0.1) !important;
+      border-color: rgba(220, 53, 69, 0.3) !important;
+    }
+
+    .processing {
+      color: #17a2b8 !important;
+      background: rgba(23, 162, 184, 0.1) !important;
+      border-color: rgba(23, 162, 184, 0.3) !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 2.2rem;
+      }
+
+      .container {
+        padding: 40px 30px;
+        margin: 0 15px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .biometric-buttons {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      button {
+        padding: 14px 18px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-title {
+        font-size: 1.8rem;
+      }
+
+      .container {
+        padding: 35px 25px;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+</head>
+<body>
+  <div id="vanta-bg"></div>
+  
+  <div class="particles" id="particles-container"></div>
+  
+  <div class="glow-effect"></div>
+
+  <div class="page-container">
+    <div class="header-section">
+      <h1 class="main-title">Student Registration</h1>
+    </div>
+
+    <div class="container">
+      <h2>Create Your Account</h2>
+
+      <form id="regForm" method="POST" action="/student/register">
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              Student ID
+            </label>
+            <input type="text" id="student_id" name="student_id" placeholder="2024001" required>
+          </div>
+          <div class="form-group">
+            <label>
+              Username
+            </label>
+            <input type="text" name="username" placeholder="john_doe" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              Password
+            </label>
+            <input type="password" name="password" placeholder="Create secure password" required>
+          </div>
+          <div class="form-group">
+            <label>
+              Email
+            </label>
+            <input type="email" name="email" placeholder="student@university.edu" required>
+          </div>
+        </div>
+
+        <div class="biometric-section">
+          <div class="biometric-title"> Biometric Registration</div>
+          <div class="biometric-buttons">
+            <button type="button" class="btn-face" onclick="registerFace()">
+              Register Face
+            </button>
+            <button type="button" class="btn-speech" onclick="registerSpeech()">
+               Register Voice
+            </button>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <div id="speechPhrase"></div>
+          <div id="result"></div>
+        </div>
+
+        <!-- Final submit -->
+        <button type="submit" id="submitBtn" class="btn-save">
+           Complete Registration
+        </button>
+              <p class="footer-text loading">
+        Already have an account?
+        <a href="{{ url_for('web.student_login') }}">Login Here</a>
+      </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Vanta.js network background
+      VANTA.NET({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0xffd700,
+        backgroundColor: 0x000000,
+        points: 8.00,
+        maxDistance: 25.00,
+        spacing: 20.00
+      });
+
+      // Create floating particles
+      function createParticles() {
+        const container = document.getElementById('particles-container');
+        const particleCount = 1500; // Reduced for less distraction
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          
+          // Random position
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          
+          // Random animation delay
+          particle.style.animationDelay = Math.random() * 10 + 's';
+          
+          // Random animation duration
+          particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+          
+          container.appendChild(particle);
+        }
+      }
+
+      createParticles();
+
+      // Add interactive effects
+      const inputs = document.querySelectorAll('input');
+      
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.closest('.form-group').querySelector('label').style.color = '#FFA500';
+        });
+
+        input.addEventListener('blur', function() {
+          if (!this.value) {
+            this.closest('.form-group').querySelector('label').style.color = '#FFD700';
+          }
+        });
+
+        // Student ID formatting
+        if (input.id === 'student_id') {
+          input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+          });
+        }
+      });
+
+      // Parallax effect for glow
+      document.addEventListener('mousemove', function(e) {
+        const glow = document.querySelector('.glow-effect');
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        
+        glow.style.transform = `translate(${-50 + x * 3}%, ${-50 + y * 3}%)`;
+      });
+    });
+
+    function updateResult(message, type = 'info') {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = message;
+      resultDiv.className = type;
+      resultDiv.style.display = 'block';
+    }
+
+    async function registerFace() {
+      const id = document.getElementById("student_id").value;
+      if (!id) {
+        alert("⚠️ Please enter Student ID first!");
+        document.getElementById("student_id").focus();
+        return;
+      }
+
+      updateResult("📸 Starting face registration... Please look at the camera", "processing");
+      
+      try {
+        const res = await fetch(`/face_register_blink?id=${id}`);
+        const data = await res.json();
+        
+        if (data.message) {
+          const isSuccess = data.message.toLowerCase().includes('success') || 
+                          data.message.toLowerCase().includes('registered');
+          updateResult(data.message, isSuccess ? "success" : "error");
+        } else {
+          updateResult("✅ Face registered successfully!", "success");
+        }
+      } catch (error) {
+        updateResult("❌ Face registration failed. Please try again.", "error");
+        console.error('Face registration error:', error);
+      }
+    }
+
+    async function registerSpeech() {
+      const id = document.getElementById("student_id").value;
+      if (!id) {
+        alert("⚠️ Please enter Student ID first!");
+        document.getElementById("student_id").focus();
+        return;
+      }
+
+      try {
+        updateResult("🔄 Preparing speech registration...", "processing");
+        
+        const phraseRes = await fetch(`/speech_phrase`);
+        const phraseData = await phraseRes.json();
+        const phrase = phraseData.phrase;
+
+        document.getElementById("speechPhrase").innerHTML = 
+          `<strong>📢 Please read aloud clearly:</strong><br>"${phrase}"`;
+        
+        updateResult("🎤 Recording in progress... Please speak now", "processing");
+
+        const res = await fetch(`/speech_register?id=${id}&phrase=${encodeURIComponent(phrase)}`, {
+          method: "POST"
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          updateResult("✅ Voice registered successfully!", "success");
+        } else {
+          updateResult("❌ " + (data.message || "Voice registration failed. Please try again."), "error");
+        }
+      } catch (error) {
+        updateResult("❌ Speech registration failed. Please check your connection.", "error");
+        console.error('Speech registration error:', error);
+      }
+    }
+
+    // Form submission handling
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerHTML = '🔄 Creating Account...';
+      submitBtn.style.transform = 'scale(0.98)';
+      
+      setTimeout(() => {
+        submitBtn.style.transform = 'scale(1)';
+      }, 200);
+    });
+  </script>
+</body>
+</html>
